@@ -1,0 +1,97 @@
+syntax = "v1"
+
+info (
+	title:   "用户中心"
+	desc:    "用户中心"
+	author:  "zwh"
+	version: "2.0"
+)
+
+// 根据用户id查询文章
+//p.GET("/api/blog/post", handler.ListPostByUserID)
+//查询当前用户的文章
+//p.GET("/api/blog/myPost", handler.ListMyPosts)
+//查询所有文章
+//p.GET("/api/blog/post/list", handler.ListAllPosts)
+//根据文章id查询文章
+//p.GET("api/blog/post/:id", handler.GetPost)
+//添加文章
+//p.POST("/api/blog/post/create", handler.CreatePost)
+//修改文章
+//p.POST("/api/blog/post/edit", handler.UpdatePost)
+//删除文章
+//p.DELETE("/api/blog/post/:id", handler.DeletePost)
+//添加评论
+//p.POST("/api/blog/comment/:id", handler.CreateComment)
+//支持获取某篇文章的所有评论列表
+//p.GET("/api/blog/comments/:id", handler.FindCommentsByPostId)
+type (
+	GetPostById {
+		ID int64 `path:"id"` //路径方式
+	}
+	GetPostInfoReq {
+		UserId int64 `json:"userId"`
+	}
+	PostInfo {
+		ID        int64         `json:"id"`
+		Title     string        `json:"title"`
+		Content   string        `json:"content"`
+		UserID    int64         `json:"userId"`
+		CmtStatus string        `json:"cmtStatus"`
+		Comments  []CommentInfo `json:"comments"` //返回评论列表
+	}
+	AddPostInfoReq {
+		Title   string `json:"title"`
+		Content string `json:"content"`
+	}
+	CommentInfo {
+		ID      int64  `json:"id"`
+		Content string `json:"content"`
+		UserID  uint   `json:"userId"`
+		PostID  int64  `json:"postId"`
+	}
+	AddPostComment {
+		PostID  int64  `json:"postId"`
+		Content string `json:"content"`
+	}
+)
+
+@server (
+	group:  blog
+	prefix: /api/blog/v2
+	jwt:    Auth
+)
+service gateway-api {
+	@doc "根据文章id查询文章"
+	@handler getPostById
+	post /post/:id returns (PostInfo) //返回文章
+
+	@doc "根据用户id查询所以文章"
+	@handler getPostByUserId
+	get /post (GetPostInfoReq) returns ([]PostInfo) //返回文章列表
+
+	@doc "查询当前用户的文章"
+	@handler getCurrentPost
+	get /myPost returns ([]PostInfo)
+
+	@doc "添加文章"
+	@handler addPost
+	post /post/create (AddPostInfoReq)
+
+	@doc "修改文章"
+	@handler updatePost
+	post /post/update (AddPostInfoReq)
+
+	@doc "删除文章"
+	@handler deletePost
+	delete /post/:id (GetPostById)
+
+	@doc "添加评论"
+	@handler addPostComment
+	post /post/comment (AddPostComment)
+
+	@doc "获取文章的所有评论列表"
+	@handler getPostComments
+	post /post/comments (GetPostById)
+}
+

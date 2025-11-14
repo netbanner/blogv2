@@ -1,0 +1,82 @@
+syntax = "v1"
+
+info (
+	title:   "用户中心"
+	desc:    "用户中心"
+	author:  "zwh"
+	version: "2.0"
+)
+
+type (
+	// 定义登录接口的 json 请求体
+	LoginReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	// 定义登录接口的 json 响应体
+	LoginResp {
+		Id       int64  `json:"id"`
+		Token    string `json:"token"`
+		ExpireAt string `json:"expireAt"`
+	}
+)
+
+type (
+	RegisterReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+		Email    string `json:"email"`
+	}
+	ResisterResp {
+		Code int64  `json:"code"`
+		Msg  string `json:"msg"`
+	}
+)
+
+type (
+	// 定义获取用户信息的 json 请求体
+	GetUserInfoReq {
+		Id int64 `json:"id"`
+	}
+	// 定义获取用户信息的 json 响应体
+	GetUserInfoResp {
+		Id   int64  `json:"id"`
+		Name string `json:"name"`
+		Desc string `json:"desc"`
+	}
+	// 定义更新用户信息的 json 请求体
+	UpdateUserInfoReq {
+		Id   int64  `json:"id"`
+		Name string `json:"name"`
+		Desc string `json:"desc"`
+	}
+)
+
+@server (
+	group:  login
+	prefix: /api/blog/v2
+)
+// 用户登录模块
+service gateway-api {
+	@doc "注册"
+	@handler register
+	post /user/register (RegisterReq) returns (ResisterResp)
+
+	@doc "用户登录"
+	@handler login
+	post /user/login (LoginReq) returns (LoginResp)
+}
+
+@server (
+	group:  user
+	prefix: /api/blog/v2
+	jwt:    Auth
+)
+service gateway-api {
+	@handler getUserInfo
+	post /user/info (GetUserInfoReq) returns (GetUserInfoResp)
+
+	@handler updateUserInfo
+	post /user/info/update (UpdateUserInfoReq)
+}
+

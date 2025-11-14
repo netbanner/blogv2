@@ -1,0 +1,7 @@
+Name: gateway-api
+Host: 0.0.0.0
+Port: 8888
+Auth:
+  # AccessSecret 大于8位
+  AccessSecret: "abc1233333"
+  AccessExpire: 3600000
