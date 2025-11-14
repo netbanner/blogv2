@@ -18,4 +18,6 @@
     AccessExpire: 3600000
 4. 注意上面生成的时候[routes.go](gateway-api%2Finternal%2Fhandler%2Froutes.go) 每次都会覆盖
 如果同时生成两个api，**需要自行添加路由，最好api 模块分开，便于区分，同样types.go也有一样的问题**
-4. 启动网关服务测试： go run gateway.go
+5. 启动网关服务测试： go run gateway.go
+6. 生成model ` ./genModel.sh blog users
+   `
