@@ -27,7 +27,7 @@ func main() {
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		user_center.RegisterUserCenterServer(grpcServer, server.NewUserCenterServer(ctx))
-
+		//添加模式 反射注入
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)
 		}
