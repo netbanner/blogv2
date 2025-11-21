@@ -9,12 +9,12 @@ import (
 
 	"blogV2/user-rpc/internal/logic"
 	"blogV2/user-rpc/internal/svc"
-	"blogV2/user-rpc/user-center"
+	"blogV2/user-rpc/usercenter"
 )
 
 type UserCenterServer struct {
 	svcCtx *svc.ServiceContext
-	user_center.UnimplementedUserCenterServer
+	usercenter.UnimplementedUserCenterServer
 }
 
 func NewUserCenterServer(svcCtx *svc.ServiceContext) *UserCenterServer {
@@ -24,25 +24,25 @@ func NewUserCenterServer(svcCtx *svc.ServiceContext) *UserCenterServer {
 }
 
 // 用户注册
-func (s *UserCenterServer) Register(ctx context.Context, in *user_center.RegisterReq) (*user_center.RegisterResp, error) {
+func (s *UserCenterServer) Register(ctx context.Context, in *usercenter.RegisterReq) (*usercenter.RegisterResp, error) {
 	l := logic.NewRegisterLogic(ctx, s.svcCtx)
 	return l.Register(in)
 }
 
 // 用户登录
-func (s *UserCenterServer) Login(ctx context.Context, in *user_center.LoginReq) (*user_center.LoginResp, error) {
+func (s *UserCenterServer) Login(ctx context.Context, in *usercenter.LoginReq) (*usercenter.LoginResp, error) {
 	l := logic.NewLoginLogic(ctx, s.svcCtx)
 	return l.Login(in)
 }
 
 // 获取用户信息
-func (s *UserCenterServer) GetUserInfo(ctx context.Context, in *user_center.GetUserInfoReq) (*user_center.GetUserInfoResp, error) {
+func (s *UserCenterServer) GetUserInfo(ctx context.Context, in *usercenter.GetUserInfoReq) (*usercenter.GetUserInfoResp, error) {
 	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
 	return l.GetUserInfo(in)
 }
 
 // 更新用户信息
-func (s *UserCenterServer) UpdateUserInfo(ctx context.Context, in *user_center.UpdateUserInfoReq) (*user_center.UpdateUserInfoResp, error) {
+func (s *UserCenterServer) UpdateUserInfo(ctx context.Context, in *usercenter.UpdateUserInfoReq) (*usercenter.UpdateUserInfoResp, error) {
 	l := logic.NewUpdateUserInfoLogic(ctx, s.svcCtx)
 	return l.UpdateUserInfo(in)
 }

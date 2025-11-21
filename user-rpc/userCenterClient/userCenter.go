@@ -2,26 +2,26 @@
 // goctl 1.9.2
 // Source: user.proto
 
-package usercenter
+package userCenterClient
 
 import (
 	"context"
 
-	"blogV2/user-rpc/user-center"
+	"blogV2/user-rpc/usercenter"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 )
 
 type (
-	GetUserInfoReq     = user_center.GetUserInfoReq
-	GetUserInfoResp    = user_center.GetUserInfoResp
-	LoginReq           = user_center.LoginReq
-	LoginResp          = user_center.LoginResp
-	RegisterReq        = user_center.RegisterReq
-	RegisterResp       = user_center.RegisterResp
-	UpdateUserInfoReq  = user_center.UpdateUserInfoReq
-	UpdateUserInfoResp = user_center.UpdateUserInfoResp
+	GetUserInfoReq     = usercenter.GetUserInfoReq
+	GetUserInfoResp    = usercenter.GetUserInfoResp
+	LoginReq           = usercenter.LoginReq
+	LoginResp          = usercenter.LoginResp
+	RegisterReq        = usercenter.RegisterReq
+	RegisterResp       = usercenter.RegisterResp
+	UpdateUserInfoReq  = usercenter.UpdateUserInfoReq
+	UpdateUserInfoResp = usercenter.UpdateUserInfoResp
 
 	UserCenter interface {
 		// 用户注册
@@ -47,24 +47,24 @@ func NewUserCenter(cli zrpc.Client) UserCenter {
 
 // 用户注册
 func (m *defaultUserCenter) Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error) {
-	client := user_center.NewUserCenterClient(m.cli.Conn())
+	client := usercenter.NewUserCenterClient(m.cli.Conn())
 	return client.Register(ctx, in, opts...)
 }
 
 // 用户登录
 func (m *defaultUserCenter) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
-	client := user_center.NewUserCenterClient(m.cli.Conn())
+	client := usercenter.NewUserCenterClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
 }
 
 // 获取用户信息
 func (m *defaultUserCenter) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
-	client := user_center.NewUserCenterClient(m.cli.Conn())
+	client := usercenter.NewUserCenterClient(m.cli.Conn())
 	return client.GetUserInfo(ctx, in, opts...)
 }
 
 // 更新用户信息
 func (m *defaultUserCenter) UpdateUserInfo(ctx context.Context, in *UpdateUserInfoReq, opts ...grpc.CallOption) (*UpdateUserInfoResp, error) {
-	client := user_center.NewUserCenterClient(m.cli.Conn())
+	client := usercenter.NewUserCenterClient(m.cli.Conn())
 	return client.UpdateUserInfo(ctx, in, opts...)
 }

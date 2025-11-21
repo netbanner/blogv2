@@ -5,3 +5,12 @@ Auth:
   # AccessSecret 大于8位
   AccessSecret: "abc1233333"
   AccessExpire: 3600000
+
+UserRpcConf:
+  Endpoints:
+    - 127.0.0.1:8080
+  NonBlock: true
+BlogRpcConf:
+  Endpoints:
+    - 127.0.0.1:8081
+  NonBlock: true

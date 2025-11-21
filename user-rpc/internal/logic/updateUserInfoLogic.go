@@ -1,10 +1,12 @@
 package logic
 
 import (
+	"blogV2/model"
 	"context"
+	"errors"
 
 	"blogV2/user-rpc/internal/svc"
-	"blogV2/user-rpc/user-center"
+	"blogV2/user-rpc/usercenter"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,9 +25,18 @@ func NewUpdateUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Up
 	}
 }
 
-// 更新用户信息
-func (l *UpdateUserInfoLogic) UpdateUserInfo(in *user_center.UpdateUserInfoReq) (*user_center.UpdateUserInfoResp, error) {
-	// todo: add your logic here and delete this line
+// UpdateUserInfo 更新用户信息
+func (l *UpdateUserInfoLogic) UpdateUserInfo(in *usercenter.UpdateUserInfoReq) (*usercenter.UpdateUserInfoResp, error) {
+	user, err := l.svcCtx.UserModel.FindOne(l.ctx, uint64(in.Id))
+	if err != nil {
+		return nil, err
+	}
+	if user != nil {
+		return nil, errors.New("用户已存在")
+	}
+	l.svcCtx.UserModel.Update(l.ctx, &model.Users{
+		UserName: in.Name,
+	})
 
-	return &user_center.UpdateUserInfoResp{}, nil
+	return &usercenter.UpdateUserInfoResp{Success: true, Message: "修改成功"}, nil
 }

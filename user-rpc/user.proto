@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package usercenter;
 
-option go_package = "./user-center";
+option go_package = "./usercenter";
 
 // 用户中心服务
 service UserCenter {

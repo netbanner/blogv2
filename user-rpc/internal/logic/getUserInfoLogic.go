@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"blogV2/user-rpc/internal/svc"
-	"blogV2/user-rpc/user-center"
+	"blogV2/user-rpc/usercenter"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,8 +24,8 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 // 获取用户信息
-func (l *GetUserInfoLogic) GetUserInfo(in *user_center.GetUserInfoReq) (*user_center.GetUserInfoResp, error) {
+func (l *GetUserInfoLogic) GetUserInfo(in *usercenter.GetUserInfoReq) (*usercenter.GetUserInfoResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &user_center.GetUserInfoResp{}, nil
+	return &usercenter.GetUserInfoResp{}, nil
 }

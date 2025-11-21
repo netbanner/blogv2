@@ -1,7 +1,15 @@
 Name: user.rpc
 ListenOn: 0.0.0.0:8080
-Mode: dev  ## dev/prod
 Etcd:
   Hosts:
   - 127.0.0.1:2379
   Key: user.rpc
+DB:
+  DataSource: root:530626kl@tcp(127.0.0.1:3306)/blog?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+Cache:
+  - Host: 127.0.0.1:6379
+Auth:
+  # AccessSecret 大于8位
+  AccessSecret: "abc1233333"
+  AccessExpire: 3600000
+

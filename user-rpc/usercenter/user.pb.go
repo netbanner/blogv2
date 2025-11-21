@@ -4,7 +4,7 @@
 // 	protoc        v6.33.0
 // source: user.proto
 
-package user_center
+package usercenter
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -500,7 +500,7 @@ const file_user_proto_rawDesc = "" +
 	"\bRegister\x12\x17.usercenter.RegisterReq\x1a\x18.usercenter.RegisterResp\x124\n" +
 	"\x05Login\x12\x14.usercenter.LoginReq\x1a\x15.usercenter.LoginResp\x12F\n" +
 	"\vGetUserInfo\x12\x1a.usercenter.GetUserInfoReq\x1a\x1b.usercenter.GetUserInfoResp\x12O\n" +
-	"\x0eUpdateUserInfo\x12\x1d.usercenter.UpdateUserInfoReq\x1a\x1e.usercenter.UpdateUserInfoRespB\x0fZ\r./user-centerb\x06proto3"
+	"\x0eUpdateUserInfo\x12\x1d.usercenter.UpdateUserInfoReq\x1a\x1e.usercenter.UpdateUserInfoRespB\x0eZ\f./usercenterb\x06proto3"
 
 var (
 	file_user_proto_rawDescOnce sync.Once

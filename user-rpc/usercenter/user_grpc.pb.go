@@ -4,7 +4,7 @@
 // - protoc             v6.33.0
 // source: user.proto
 
-package user_center
+package usercenter
 
 import (
 	context "context"

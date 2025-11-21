@@ -7,7 +7,7 @@ import (
 	"blogV2/user-rpc/internal/config"
 	"blogV2/user-rpc/internal/server"
 	"blogV2/user-rpc/internal/svc"
-	"blogV2/user-rpc/user-center"
+	"blogV2/user-rpc/usercenter"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -26,8 +26,8 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		user_center.RegisterUserCenterServer(grpcServer, server.NewUserCenterServer(ctx))
-		//添加模式 反射注入
+		usercenter.RegisterUserCenterServer(grpcServer, server.NewUserCenterServer(ctx))
+
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)
 		}
