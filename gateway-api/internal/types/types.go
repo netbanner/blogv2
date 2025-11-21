@@ -11,7 +11,7 @@ type LoginReq struct {
 type LoginResp struct {
 	Id       int64  `json:"id"`
 	Token    string `json:"token"`
-	ExpireAt string `json:"expireAt"`
+	ExpireAt int64  `json:"expireAt"`
 }
 
 type RegisterReq struct {
@@ -24,8 +24,6 @@ type ResisterResp struct {
 	Code int64  `json:"code"`
 	Msg  string `json:"msg"`
 }
-
-
 
 type GetUserInfoReq struct {
 	Id int64 `json:"id"`

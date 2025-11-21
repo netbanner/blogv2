@@ -4,7 +4,10 @@
 package login
 
 import (
+	"blogV2/model"
 	"context"
+	"database/sql"
+	"errors"
 
 	"blogV2/gateway-api/internal/svc"
 	"blogV2/gateway-api/internal/types"
@@ -18,7 +21,7 @@ type RegisterLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// 注册
+// NewRegisterLogic 注册
 func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RegisterLogic {
 	return &RegisterLogic{
 		Logger: logx.WithContext(ctx),
@@ -28,7 +31,22 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.ResisterResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	_, err = l.svcCtx.UsersModel.FindByUserName(l.ctx, req.Username)
+	if err == nil {
+		return nil, errors.New("用户名已存在")
+	}
+	if !errors.Is(err, model.ErrNotFound) { // 其他错误
+		return nil, err
+	}
+	// 插入（自动生成缓存）
+	user := model.Users{
+		UserName: sql.NullString{String: req.Username, Valid: true},
+		Password: sql.NullString{String: req.Password, Valid: true}, // 生产环境请使用 bcrypt 加密
+		Email:    sql.NullString{String: req.Email, Valid: true},
+	}
+	_, err = l.svcCtx.UsersModel.Insert(l.ctx, &user)
+	if err != nil {
+		return nil, err
+	}
+	return &types.ResisterResp{Code: 200, Msg: "注册成功"}, nil
 }
