@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package usercenter;
+
+option go_package = "./user-center";
+
+// 用户中心服务
+service UserCenter {
+  // 用户注册
+  rpc Register(RegisterReq) returns (RegisterResp);
+  // 用户登录
+  rpc Login(LoginReq) returns (LoginResp);
+  // 获取用户信息
+  rpc GetUserInfo(GetUserInfoReq) returns (GetUserInfoResp);
+  // 更新用户信息
+  rpc UpdateUserInfo(UpdateUserInfoReq) returns (UpdateUserInfoResp);
+}
+
+message RegisterReq {
+  string username = 1;
+  string password = 2;
+  string email = 3;
+}
+
+message RegisterResp {
+  int64 code = 1;
+  string msg = 2;
+}
+
+message LoginReq {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResp {
+  int64 id = 1;
+  string token = 2;
+  string expireAt = 3;
+}
+
+message GetUserInfoReq {
+  int64 id = 1;
+}
+
+message GetUserInfoResp {
+  int64 id = 1;
+  string name = 2;
+  string desc = 3;
+}
+
+message UpdateUserInfoReq {
+  int64 id = 1;
+  string name = 2;
+  string desc = 3;
+}
+
+message UpdateUserInfoResp {
+  bool success = 1;
+  string message = 2;
+}

@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+
+package blog;
+
+option go_package = "./blog";
+
+// 博客服务
+service Blog {
+  // 根据文章id查询文章
+  rpc GetPostById(GetPostByIdReq) returns (PostInfo);
+  // 根据用户id查询所有文章
+  rpc GetPostByUserId(GetPostByUserIdReq) returns (GetPostByUserIdResp);
+  // 查询当前用户的文章
+  rpc GetCurrentPost(GetCurrentPostReq) returns (GetCurrentPostResp);
+  // 添加文章
+  rpc AddPost(AddPostReq) returns (AddPostResp);
+  // 修改文章
+  rpc UpdatePost(UpdatePostReq) returns (UpdatePostResp);
+  // 删除文章
+  rpc DeletePost(DeletePostReq) returns (DeletePostResp);
+  // 添加评论
+  rpc AddPostComment(AddPostCommentReq) returns (AddPostCommentResp);
+  // 获取文章的所有评论列表
+  rpc GetPostComments(GetPostCommentsReq) returns (GetPostCommentsResp);
+}
+
+message GetPostByIdReq {
+  int64 id = 1;
+}
+
+message GetPostByUserIdReq {
+  int64 userId = 1;
+}
+
+message GetPostByUserIdResp {
+  repeated PostInfo posts = 1;
+}
+
+message GetCurrentPostReq {
+  int64 userId = 1;
+}
+
+message GetCurrentPostResp {
+  repeated PostInfo posts = 1;
+}
+
+message AddPostReq {
+  string title = 1;
+  string content = 2;
+  int64 userId = 3;
+}
+
+message AddPostResp {
+  bool success = 1;
+  string message = 2;
+}
+
+message UpdatePostReq {
+  int64 id = 1;
+  string title = 2;
+  string content = 3;
+  int64 userId = 4;
+}
+
+message UpdatePostResp {
+  bool success = 1;
+  string message = 2;
+}
+
+message DeletePostReq {
+  int64 id = 1;
+  int64 userId = 2;
+}
+
+message DeletePostResp {
+  bool success = 1;
+  string message = 2;
+}
+
+message AddPostCommentReq {
+  int64 postId = 1;
+  string content = 2;
+  int64 userId = 3;
+}
+
+message AddPostCommentResp {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetPostCommentsReq {
+  int64 postId = 1;
+}
+
+message GetPostCommentsResp {
+  repeated CommentInfo comments = 1;
+}
+
+message PostInfo {
+  int64 id = 1;
+  string title = 2;
+  string content = 3;
+  int64 userId = 4;
+  string cmtStatus = 5;
+  repeated CommentInfo comments = 6;
+}
+
+message CommentInfo {
+  int64 id = 1;
+  string content = 2;
+  uint32 userId = 3;
+  int64 postId = 4;
+}
