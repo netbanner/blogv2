@@ -4,7 +4,9 @@
 package user
 
 import (
+	"blogV2/user-rpc/usercenter"
 	"context"
+	"fmt"
 
 	"blogV2/gateway-api/internal/svc"
 	"blogV2/gateway-api/internal/types"
@@ -27,7 +29,17 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserInfoLogic) GetUserInfo(req *types.GetUserInfoReq) (resp *types.GetUserInfoResp, err error) {
-	// todo: add your logic here and delete this line
 
-	return
+	logx.Info("获取用户信息")
+	getUserInfoResp, err := l.svcCtx.UserRPC.GetUserInfo(l.ctx, &usercenter.GetUserInfoReq{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	fmt.Printf("用户信息 %v\n", getUserInfoResp.Id)
+	return &types.GetUserInfoResp{
+		Id:   getUserInfoResp.Id,
+		Name: getUserInfoResp.Name,
+	}, nil
 }

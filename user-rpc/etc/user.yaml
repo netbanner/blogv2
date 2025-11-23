@@ -7,8 +7,8 @@ Etcd:
 DB:
   DataSource: root:530626kl@tcp(127.0.0.1:3306)/blog?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 Cache:
-  - Host: 127.0.0.1:6379
-Auth:
+  - Host: 127.0.0.1:16379
+Jwt:
   # AccessSecret 大于8位
   AccessSecret: "abc1233333"
   AccessExpire: 3600000

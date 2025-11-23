@@ -36,7 +36,7 @@ func (l *LoginLogic) Login(in *usercenter.LoginReq) (*usercenter.LoginResp, erro
 		return nil, errors.New("密码错误")
 	}
 	now := time.Now()
-	expireDuration := time.Duration(l.svcCtx.Config.Auth.AccessExpire) * time.Second
+	expireDuration := time.Duration(l.svcCtx.Config.Jwt.AccessExpire) * time.Second
 	expireAt := now.Add(expireDuration).Unix()
 
 	// 使用 golang-jwt/jwt/v4 生成 token
@@ -48,7 +48,7 @@ func (l *LoginLogic) Login(in *usercenter.LoginReq) (*usercenter.LoginResp, erro
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedToken, err := token.SignedString([]byte(l.svcCtx.Config.Auth.AccessSecret))
+	signedToken, err := token.SignedString([]byte(l.svcCtx.Config.Jwt.AccessSecret))
 	if err != nil {
 		return nil, err
 	}

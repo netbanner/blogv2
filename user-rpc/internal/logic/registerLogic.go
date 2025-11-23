@@ -28,7 +28,7 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 // Register 用户注册
 func (l *RegisterLogic) Register(in *usercenter.RegisterReq) (*usercenter.RegisterResp, error) {
 	user, err := l.svcCtx.UserModel.FindOneByUsername(l.ctx, in.Username)
-	if err != nil {
+	if err != nil && err != model.ErrNotFound {
 		return nil, err
 	}
 	if user != nil {

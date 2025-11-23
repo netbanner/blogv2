@@ -5,15 +5,17 @@ package svc
 
 import (
 	"blogV2/blog-rpc/blog"
+	"blogV2/blog-rpc/blogClient"
 	"blogV2/gateway-api/internal/config"
+	"blogV2/user-rpc/userCenterClient"
 	"blogV2/user-rpc/usercenter"
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type ServiceContext struct {
 	Config  config.Config
-	UserRPC usercenter.UserCenterClient
-	BlogRPC blog.BlogClient
+	UserRPC userCenterClient.UserCenter
+	BlogRPC blogClient.Blog
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {

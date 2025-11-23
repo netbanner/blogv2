@@ -4,7 +4,9 @@
 package login
 
 import (
+	"blogV2/user-rpc/userCenterClient"
 	"context"
+	"errors"
 
 	"blogV2/gateway-api/internal/svc"
 	"blogV2/gateway-api/internal/types"
@@ -28,7 +30,17 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.ResisterResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	logx.Info("用户注册")
+	registerResp, err := l.svcCtx.UserRPC.Register(l.ctx, &userCenterClient.RegisterReq{
+		Email:    req.Email,
+		Password: req.Password,
+		Username: req.Username,
+	})
+	if err != nil {
+		return nil, errors.New("注册错误")
+	}
+	return &types.ResisterResp{
+		Code: registerResp.Code,
+		Msg:  registerResp.Msg,
+	}, nil
 }
