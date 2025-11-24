@@ -4,7 +4,9 @@
 package blog
 
 import (
+	"blogV2/blog-rpc/blog"
 	"context"
+	"errors"
 
 	"blogV2/gateway-api/internal/svc"
 	"blogV2/gateway-api/internal/types"
@@ -18,7 +20,7 @@ type AddPostLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// 添加文章
+// NewAddPostLogic 添加文章
 func NewAddPostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPostLogic {
 	return &AddPostLogic{
 		Logger: logx.WithContext(ctx),
@@ -28,7 +30,19 @@ func NewAddPostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPostLo
 }
 
 func (l *AddPostLogic) AddPost(req *types.AddPostInfoReq) error {
-	// todo: add your logic here and delete this line
+	userIdVal := l.ctx.Value("userId")
+	userId, ok := userIdVal.(int64)
+	if !ok {
+		return errors.New("用户id不存在")
+	}
+	_, err := l.svcCtx.BlogRPC.AddPost(l.ctx, &blog.AddPostReq{
+		Content: req.Content,
+		Title:   req.Title,
+		UserId:  userId,
+	})
+	if err != nil {
+		return errors.New("添加失败")
+	}
 
 	return nil
 }

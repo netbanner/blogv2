@@ -23,9 +23,34 @@ func NewGetPostByUserIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 	}
 }
 
-// 根据用户id查询所有文章
+// GetPostByUserId 根据用户id查询所有文章 查询文章，TODO 也需把文章对应的评论也查询处理
 func (l *GetPostByUserIdLogic) GetPostByUserId(in *blog.GetPostByUserIdReq) (*blog.GetPostByUserIdResp, error) {
-	// todo: add your logic here and delete this line
+	posts, err := l.svcCtx.PostModel.FindPostByUserId(l.ctx, uint64(in.UserId))
+	if err != nil {
+		return nil, err
+	}
+	postsInfo := make([]*blog.PostInfo, len(posts))
+	for i, post := range posts {
+		postsInfo[i] = &blog.PostInfo{
+			Id: int64(post.Id),
+			//处理空值
+			Title: func() string {
+				if post.Title.Valid {
+					return post.Title.String
+				}
+				return ""
+			}(),
+			Content: func() string {
+				if post.Content.Valid {
+					return post.Content.String
+				}
+				return ""
+			}(),
+		}
+	}
 
-	return &blog.GetPostByUserIdResp{}, nil
+	return &blog.GetPostByUserIdResp{
+		Posts: postsInfo,
+	}, nil
+
 }

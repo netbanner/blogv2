@@ -23,9 +23,18 @@ func NewGetPostByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPo
 	}
 }
 
-// 根据文章id查询文章
+// GetPostById 根据文章id查询文章
 func (l *GetPostByIdLogic) GetPostById(in *blog.GetPostByIdReq) (*blog.PostInfo, error) {
-	// todo: add your logic here and delete this line
+	post, err := l.svcCtx.PostModel.FindOne(l.ctx, uint64(in.Id))
+	if err != nil {
+		return nil, err
+	}
 
-	return &blog.PostInfo{}, nil
+	return &blog.PostInfo{
+		Id:        int64(post.Id),
+		Title:     post.Title.String,
+		Content:   post.Content.String,
+		UserId:    post.UserId.Int64,
+		CmtStatus: post.CmtStatus,
+	}, nil
 }

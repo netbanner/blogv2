@@ -4,11 +4,11 @@
 package handler
 
 import (
-	"net/http"
+	blog "blogV2/gateway-api/internal/handler/blog"
 	login "blogV2/gateway-api/internal/handler/login"
 	user "blogV2/gateway-api/internal/handler/user"
-	blog "blogV2/gateway-api/internal/handler/blog"
 	"blogV2/gateway-api/internal/svc"
+	"net/http"
 
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -45,7 +45,9 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: user.UpdateUserInfoHandler(serverCtx),
 			},
 		},
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret), // 使用内置JWT中间件
+		// 或者使用自定义中间件:
+		// rest.WithMiddlewares([]rest.Middleware{serverCtx.JwtMiddleware.Handle})
 		rest.WithPrefix("/api/blog/v2"),
 	)
 	server.AddRoutes(
@@ -95,11 +97,13 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				// 修改文章
 				Method:  http.MethodPost,
-				Path:    "/post/update",
+				Path:    "/post/update/:id",
 				Handler: blog.UpdatePostHandler(serverCtx),
 			},
 		},
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret), // 使用内置JWT中间件
+		// 或者使用自定义中间件:
+		// rest.WithMiddlewares([]rest.Middleware{serverCtx.JwtMiddleware.Handle})
 		rest.WithPrefix("/api/blog/v2"),
 	)
 }

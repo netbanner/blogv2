@@ -23,9 +23,13 @@ func NewDeletePostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delete
 	}
 }
 
-// 删除文章
+// DeletePost 删除文章
 func (l *DeletePostLogic) DeletePost(in *blog.DeletePostReq) (*blog.DeletePostResp, error) {
-	// todo: add your logic here and delete this line
+	logx.Info("删除文章")
+	err := l.svcCtx.PostModel.Delete(l.ctx, uint64(in.Id))
+	if err != nil {
+		return nil, err
+	}
 
-	return &blog.DeletePostResp{}, nil
+	return &blog.DeletePostResp{Success: true, Message: "删除文章成功"}, nil
 }

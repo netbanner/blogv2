@@ -1,10 +1,11 @@
 package logic
 
 import (
-	"context"
-
 	"blogV2/blog-rpc/blog"
 	"blogV2/blog-rpc/internal/svc"
+	"blogV2/model"
+	"context"
+	"database/sql"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,9 +24,17 @@ func NewAddPostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPostLo
 	}
 }
 
-// 添加文章
+// AddPost 添加文章
 func (l *AddPostLogic) AddPost(in *blog.AddPostReq) (*blog.AddPostResp, error) {
-	// todo: add your logic here and delete this line
+	logx.Info("添加文章")
+	_, err := l.svcCtx.PostModel.Insert(l.ctx, &model.Posts{
+		UserId:  sql.NullInt64{Int64: in.UserId, Valid: true},
+		Title:   sql.NullString{String: in.Title, Valid: true},
+		Content: sql.NullString{String: in.Content, Valid: true},
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return &blog.AddPostResp{}, nil
+	return &blog.AddPostResp{Success: true, Message: "添加文章成功"}, nil
 }

@@ -22,11 +22,11 @@ func GetPostCommentsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := blog.NewGetPostCommentsLogic(r.Context(), svcCtx)
-		err := l.GetPostComments(&req)
+		resp, err := l.GetPostComments(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
-			httpx.Ok(w)
+			httpx.OkJsonCtx(r.Context(), w, resp)
 		}
 	}
 }

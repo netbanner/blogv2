@@ -1,9 +1,10 @@
 package logic
 
 import (
+	"blogV2/common/util"
 	"context"
 	"errors"
-	"github.com/golang-jwt/jwt/v4"
+	"strconv"
 	"time"
 
 	"blogV2/user-rpc/internal/svc"
@@ -39,22 +40,19 @@ func (l *LoginLogic) Login(in *usercenter.LoginReq) (*usercenter.LoginResp, erro
 	expireDuration := time.Duration(l.svcCtx.Config.Jwt.AccessExpire) * time.Second
 	expireAt := now.Add(expireDuration).Unix()
 
-	// 使用 golang-jwt/jwt/v4 生成 token
-	claims := jwt.MapClaims{
-		"userId":   user.Id,
-		"username": user.UserName,
-		"exp":      expireAt,
-		"iat":      now.Unix(),
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedToken, err := token.SignedString([]byte(l.svcCtx.Config.Jwt.AccessSecret))
+	// 使用标准化方法生成 token
+	signedToken, err := util.GenerateToken(
+		int64(user.Id),
+		user.UserName,
+		l.svcCtx.Config.Jwt.AccessSecret,
+		expireDuration,
+	)
 	if err != nil {
 		return nil, err
 	}
 
 	return &usercenter.LoginResp{
 		Token:    signedToken,
-		ExpireAt: string(expireAt),
+		ExpireAt: strconv.FormatInt(expireAt, 10),
 	}, nil
 }

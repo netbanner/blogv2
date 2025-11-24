@@ -4,7 +4,9 @@
 package blog
 
 import (
+	"blogV2/blog-rpc/blog"
 	"context"
+	"errors"
 
 	"blogV2/gateway-api/internal/svc"
 	"blogV2/gateway-api/internal/types"
@@ -18,7 +20,7 @@ type DeletePostLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// 删除文章
+// NewDeletePostLogic 删除文章
 func NewDeletePostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeletePostLogic {
 	return &DeletePostLogic{
 		Logger: logx.WithContext(ctx),
@@ -28,7 +30,9 @@ func NewDeletePostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delete
 }
 
 func (l *DeletePostLogic) DeletePost(req *types.GetPostById) error {
-	// todo: add your logic here and delete this line
-
+	_, err := l.svcCtx.BlogRPC.DeletePost(l.ctx, &blog.DeletePostReq{Id: req.ID})
+	if err != nil {
+		return errors.New("删除文章失败")
+	}
 	return nil
 }

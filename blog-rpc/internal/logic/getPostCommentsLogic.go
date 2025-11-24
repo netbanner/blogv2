@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 
 	"blogV2/blog-rpc/blog"
 	"blogV2/blog-rpc/internal/svc"
@@ -23,9 +24,29 @@ func NewGetPostCommentsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 	}
 }
 
-// 获取文章的所有评论列表
+// GetPostComments 获取文章的所有评论列表
 func (l *GetPostCommentsLogic) GetPostComments(in *blog.GetPostCommentsReq) (*blog.GetPostCommentsResp, error) {
-	// todo: add your logic here and delete this line
 
-	return &blog.GetPostCommentsResp{}, nil
+	comments, err := l.svcCtx.CommentModel.FindAll(l.ctx, in.PostId)
+	if err != nil {
+		return nil, errors.New("查询评论错误")
+	}
+	var commentList []*blog.CommentInfo
+	for _, comment := range comments {
+		commentList = append(commentList, &blog.CommentInfo{
+			Id:     int64(comment.Id),
+			PostId: comment.PostId.Int64,
+			UserId: uint32(comment.UserId.Int64),
+			Content: func() string {
+				if comment.Content.Valid {
+					return comment.Content.String
+				}
+				return ""
+			}(),
+		})
+	}
+
+	return &blog.GetPostCommentsResp{
+		Comments: commentList,
+	}, nil
 }

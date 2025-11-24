@@ -1,7 +1,10 @@
 package logic
 
 import (
+	"blogV2/model"
 	"context"
+	"database/sql"
+	"errors"
 
 	"blogV2/blog-rpc/blog"
 	"blogV2/blog-rpc/internal/svc"
@@ -23,9 +26,29 @@ func NewAddPostCommentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ad
 	}
 }
 
-// 添加评论
+// AddPostComment 添加评论
 func (l *AddPostCommentLogic) AddPostComment(in *blog.AddPostCommentReq) (*blog.AddPostCommentResp, error) {
-	// todo: add your logic here and delete this line
 
-	return &blog.AddPostCommentResp{}, nil
+	post, err := l.svcCtx.PostModel.FindOne(l.ctx, uint64(in.PostId))
+	if err != nil {
+		if err == model.ErrNotFound {
+			return nil, errors.New("文章不存在")
+		}
+		return nil, err
+	}
+	if post == nil {
+		return nil, errors.New("文章不存在")
+	}
+
+	comment := &model.Comments{
+		Content: sql.NullString{String: in.Content, Valid: true},
+		PostId:  sql.NullInt64{Int64: in.PostId, Valid: true},
+		UserId:  sql.NullInt64{Int64: in.UserId, Valid: true},
+	}
+	_, err = l.svcCtx.CommentModel.Insert(l.ctx, comment)
+	if err != nil {
+		return nil, err
+	}
+
+	return &blog.AddPostCommentResp{Success: true, Message: "添加评论成功"}, nil
 }

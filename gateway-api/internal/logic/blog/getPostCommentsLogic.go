@@ -4,7 +4,9 @@
 package blog
 
 import (
+	"blogV2/blog-rpc/blog"
 	"context"
+	"errors"
 
 	"blogV2/gateway-api/internal/svc"
 	"blogV2/gateway-api/internal/types"
@@ -18,7 +20,7 @@ type GetPostCommentsLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// 获取文章的所有评论列表
+// NewGetPostCommentsLogic 获取文章的所有评论列表
 func NewGetPostCommentsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPostCommentsLogic {
 	return &GetPostCommentsLogic{
 		Logger: logx.WithContext(ctx),
@@ -27,8 +29,21 @@ func NewGetPostCommentsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 	}
 }
 
-func (l *GetPostCommentsLogic) GetPostComments(req *types.GetPostById) error {
-	// todo: add your logic here and delete this line
+func (l *GetPostCommentsLogic) GetPostComments(req *types.GetPostById) (resp []types.CommentInfo, err error) {
+	commentsResp, err := l.svcCtx.BlogRPC.GetPostComments(l.ctx, &blog.GetPostCommentsReq{
+		PostId: req.ID,
+	})
+	if err != nil {
+		return nil, errors.New("根据文章id查询评论失败")
+	}
+	resp = make([]types.CommentInfo, len(commentsResp.Comments))
+	for i, comment := range commentsResp.Comments {
+		resp[i] = types.CommentInfo{
+			ID:      comment.Id,
+			Content: comment.Content,
+			UserID:  uint(comment.UserId),
+		}
+	}
 
-	return nil
+	return resp, nil
 }

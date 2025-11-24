@@ -41,6 +41,7 @@ type (
 		Comments  []CommentInfo `json:"comments"` //返回评论列表
 	}
 	AddPostInfoReq {
+		ID      int64  `json:"id"`
 		Title   string `json:"title"`
 		Content string `json:"content"`
 	}
@@ -80,7 +81,7 @@ service gateway-api {
 
 	@doc "修改文章"
 	@handler updatePost
-	post /post/update (AddPostInfoReq)
+	post /post/update/:id (AddPostInfoReq)
 
 	@doc "删除文章"
 	@handler deletePost
@@ -92,6 +93,6 @@ service gateway-api {
 
 	@doc "获取文章的所有评论列表"
 	@handler getPostComments
-	post /post/comments (GetPostById)
+	post /post/comments (GetPostById) returns ([]CommentInfo)
 }
 
